@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="nl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sint-Franciscus Evergem - 5 ICW Hardware Intermezzo's</title>
+    
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            primary: '#083D91',    /* Donkerblauw */
+                            secondary: '#00A3A3',  /* Teal */
+                            accent: '#F4B400',     /* Geel */
+                            bg: '#F8FAFC',         /* Lichtgrijs */
+                            dark: '#1F2937'        /* Donkergrijs */
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --primary: #083D91;
+            --secondary: #00A3A3;
+            --accent: #F4B400;
+            --bg-light: #F8FAFC;
+            --text-dark: #1F2937;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* Typography strict compliance */
+        h1 { font-size: 36px; font-weight: 700; }
+        h2 { font-size: 28px; font-weight: 700; }
+        h3 { font-size: 20px; font-weight: 600; }
+        p, body { font-size: 16px; font-weight: 400; }
+        .nav-text { font-size: 16px; font-weight: 500; }
+
+        @media (max-width: 640px) {
+            h1 { font-size: 28px; }
+            h2 { font-size: 22px; }
+            h3 { font-size: 18px; }
+        }
+
+        .view-section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.25s ease-in-out;
+        }
+
+        .view-section.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .nav-link.active {
+            color: #ffffff;
+            border-bottom: 3px solid var(--secondary);
+            font-weight: 600;
+        }
+
+        .hero-overlay {
+            background: linear-gradient(135deg, rgba(8, 61, 145, 0.92) 0%, rgba(15, 23, 42, 0.88) 100%);
+        }
+
+        .hero-overlay-mitnick {
+            background: linear-gradient(135deg, rgba(8, 61, 145, 0.92) 0%, rgba(6, 78, 59, 0.9) 100%);
+        }
+
+        .hero-overlay-github {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(8, 61, 145, 0.9) 100%);
+        }
+
+        .hero-overlay-nokia {
+            background: linear-gradient(135deg, rgba(8, 61, 145, 0.92) 0%, rgba(0, 163, 163, 0.85) 100%);
+        }
+
+        .card-hover {
+            transition: all 0.25s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -8px rgba(8, 61, 145, 0.18);
+        }
+
+        /* Modal transitions */
+        .modal-backdrop {
+            transition: opacity 0.2s ease-out;
+        }
+
+        .topic-card {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--secondary);
+            box-shadow: 0 8px 16px -4px rgba(0, 163, 163, 0.15);
+        }
+
+        .topic-card.completed {
+            background-color: #F0FDF4;
+            border-color: #22C55E;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F1F5F9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between bg-[#F8FAFC] text-[#1F2937]">
+
+    <!-- Header / Navigatie -->
+    <header class="sticky top-0 z-40 bg-[#083D91] text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Logo & Schoolnaam -->
+                <a href="#home" onclick="navigateTo('home')" class="flex items-center space-x-3 group">
+                    <div class="bg-white p-2 rounded-lg text-[#083D91] font-extrabold text-xl tracking-wider shadow-sm group-hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs sm:text-sm font-semibold tracking-wider text-slate-200 uppercase">Sint-Franciscus Evergem</div>
+                        <div class="text-sm sm:text-base font-bold text-white tracking-tight">5 ICW – HARDWARE</div>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigatie -->
+                <nav class="hidden md:flex space-x-1 lg:space-x-6 items-center">
+                    <a href="#home" id="nav-home" onclick="navigateTo('home')" class="nav-link nav-text px-3 py-2 hover:text-teal-300 transition-colors active">Home</a>
+                    <a href="#mitnick" id="nav-mitnick" onclick="navigateTo('mitnick')" class="nav-link nav-text px-3 py-2 hover:text-teal-300 transition-colors">Mitnick Games</a>
+                    <a href="#github" id="nav-github" onclick="navigateTo('github')" class="nav-link nav-text px-3 py-2 hover:text-teal-300 transition-colors">GitHub</a>
+                    <a href="#nokia" id="nav-nokia" onclick="navigateTo('nokia')" class="nav-link nav-text px-3 py-2 hover:text-teal-300 transition-colors">Nokia</a>
+                </nav>
+
+                <!-- Rechter items (Zoeken & Mobiel menu toggle) -->
+                <div class="flex items-center space-x-3">
+                    <button onclick="openSearchModal()" title="Zoeken..." class="p-2 rounded-lg text-slate-200 hover:text-white hover:bg-white/10 transition-colors flex items-center space-x-2 bg-white/5 px-3 py-2">
+                        <i class="fa-solid fa-magnifying-glass text-lg"></i>
+                        <span class="hidden lg:inline text-xs opacity-80">Zoeken... (Ctrl+K)</span>
+                    </button>
+
+                    <!-- Hamburger button (Mobiel) -->
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-md text-slate-200 hover:text-white hover:bg-white/10 focus:outline-none" aria-label="Menu openen">
+                        <i class="fa-solid fa-bars text-xl" id="menu-icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobiel Navigatie Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-[#062e6e] border-t border-blue-900/50 px-4 pt-2 pb-4 space-y-1">
+            <a href="#home" onclick="navigateTo('home'); toggleMobileMenu()" class="block px-3 py-2.5 rounded-md nav-text text-white hover:bg-blue-800">Home</a>
+            <a href="#mitnick" onclick="navigateTo('mitnick'); toggleMobileMenu()" class="block px-3 py-2.5 rounded-md nav-text text-slate-200 hover:bg-blue-800">Mitnick Games</a>
+            <a href="#github" onclick="navigateTo('github'); toggleMobileMenu()" class="block px-3 py-2.5 rounded-md nav-text text-slate-200 hover:bg-blue-800">GitHub</a>
+            <a href="#nokia" onclick="navigateTo('nokia'); toggleMobileMenu()" class="block px-3 py-2.5 rounded-md nav-text text-slate-200 hover:bg-blue-800">Nokia</a>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow">
+
+        <!-- ================= HOME VIEW ================= -->
+        <section id="view-home" class="view-section active">
+            <!-- Hero Banner -->
+            <div class="relative bg-slate-900 text-white overflow-hidden min-h-[440px] flex items-center">
+                <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1600&q=80" alt="Hardware en ICT" class="absolute inset-0 w-full h-full object-cover opacity-30 object-center">
+                <div class="absolute inset-0 hero-overlay"></div>
+                
+                <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-8 space-y-5">
+                            <span class="inline-block px-3.5 py-1 bg-[#00A3A3]/30 text-teal-200 text-xs font-semibold uppercase tracking-wider rounded-full border border-[#00A3A3]/40">
+                                Sint-Franciscus Evergem • 5 ICW
+                            </span>
+                            <h1 class="text-white leading-tight">
+                                Intermezzo's 5 Hardware
+                            </h1>
+                            <p class="text-xl sm:text-2xl font-bold text-[#F4B400]">
+                                Meer dan hardware alleen.
+                            </p>
+                            <p class="text-slate-200 max-w-2xl leading-relaxed">
+                                Ontdek drie unieke leermomenten die theorie, praktijk en de echte IT-wereld samenbrengen.
+                            </p>
+                            <div class="pt-3 flex flex-wrap gap-4">
+                                <a href="#cards-section" onclick="scrollToCards()" class="inline-flex items-center gap-2 bg-[#F4B400] text-gray-900 font-bold px-6 py-3.5 rounded-lg shadow-lg hover:bg-amber-400 transition-all transform hover:-translate-y-0.5">
+                                    <span>Ontdek de intermezzo's</span>
+                                    <i class="fa-solid fa-arrow-down"></i>
+                                </a>
+                                <a href="#checklist-section" onclick="scrollToChecklist()" class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-medium px-5 py-3.5 rounded-lg backdrop-blur-sm border border-white/20 transition-all">
+                                    <i class="fa-solid fa-[#check-double] fa-list-check"></i>
+                                    <span>Bekijk functionele eisen</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="hidden lg:col-span-4 lg:flex flex-col justify-center items-end text-right space-y-2 border-l border-white/10 pl-8">
+                            <span class="text-xs tracking-[0.3em] font-mono text-teal-300">EXPLORE</span>
+                            <span class="text-xs tracking-[0.3em] font-mono text-amber-300">LEARN</span>
+                            <span class="text-xs tracking-[0.3em] font-mono text-teal-200">HACK</span>
+                            <span class="text-xs tracking-[0.3em] font-mono text-amber-400">BUILD</span>
+                            <span class="text-xs tracking-[0.3em] font-mono text-teal-300">VISIT</span>
+                            <span class="text-xs tracking-[0.3em] font-mono text-slate-300">CONNECT</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Intermezzo Cards Grid -->
+            <div id="cards-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div class="text-center max-w-2xl mx-auto mb-12">
+                    <h2 class="text-gray-900">Drie Unieke Leermomenten</h2>
+                    <p class="text-slate-600 mt-2">Klik op een van de onderstaande intermezzo's om direct naar de interactieve module te navigeren.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    
+                    <!-- Card 1: Mitnick -->
+                    <div class="bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm card-hover flex flex-col">
+                        <div class="h-48 overflow-hidden relative">
+                            <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=600&q=80" alt="Kevin Mitnick Games" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
+                            <span class="absolute top-3 left-3 bg-[#083D91] text-white text-xs font-semibold px-2.5 py-1 rounded">Intermezzo 1</span>
+                        </div>
+                        <div class="p-6 flex-grow flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-gray-900 mb-2">Kevin Mitnick Games</h3>
+                                <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                                    De jaarlijkse hackingcontest van Oost-Vlaanderen. Test je skills, denk creatief en los security challenges op.
+                                </p>
+                            </div>
+                            <button onclick="navigateTo('mitnick')" class="inline-flex items-center text-[#083D91] font-semibold text-sm hover:text-[#00A3A3] transition-colors group">
+                                <span>Lees meer</span>
+                                <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: GitHub -->
+                    <div class="bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm card-hover flex flex-col">
+                        <div class="h-48 overflow-hidden relative bg-slate-900 flex items-center justify-center">
+                            <img src="https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?auto=format&fit=crop&w=600&q=80" alt="GitHub Basisvaardigheden" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105 opacity-90">
+                            <span class="absolute top-3 left-3 bg-[#00A3A3] text-white text-xs font-semibold px-2.5 py-1 rounded">Intermezzo 2</span>
+                        </div>
+                        <div class="p-6 flex-grow flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-gray-900 mb-2">GitHub basisvaardigheden</h3>
+                                <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                                    8 interactieve lessen over de meest waardevolle tool van developers. Van clone tot pull request.
+                                </p>
+                            </div>
+                            <button onclick="navigateTo('github')" class="inline-flex items-center text-[#083D91] font-semibold text-sm hover:text-[#00A3A3] transition-colors group">
+                                <span>Lees meer & start lessen</span>
+                                <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Nokia -->
+                    <div class="bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm card-hover flex flex-col">
+                        <div class="h-48 overflow-hidden relative">
+                            <img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=600&q=80" alt="Nokia Telecomthuisnetwerk" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
+                            <span class="absolute top-3 left-3 bg-[#083D91] text-white text-xs font-semibold px-2.5 py-1 rounded">Intermezzo 3</span>
+                        </div>
+                        <div class="p-6 flex-grow flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-gray-900 mb-2">Nokia telecomthuisnetwerk</h3>
+                                <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                                    Maak kennis met netwerktechnologie en breng een bezoek aan Nokia in Antwerpen.
+                                </p>
+                            </div>
+                            <button onclick="navigateTo('nokia')" class="inline-flex items-center text-[#083D91] font-semibold text-sm hover:text-[#00A3A3] transition-colors group">
+                                <span>Lees meer</span>
+                                <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Quote Section -->
+                <div class="mt-16 bg-white rounded-2xl p-8 sm:p-12 border border-slate-200 shadow-sm text-center relative overflow-hidden">
+                    <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 text-slate-100 text-8xl font-serif select-none pointer-events-none">“</div>
+                    <blockquote class="relative z-10">
+                        <p class="text-xl sm:text-2xl italic font-medium text-slate-800 leading-relaxed mb-4">
+                            “Technology is best when it brings people together.”
+                        </p>
+                        <footer class="text-sm font-semibold text-slate-500">
+                            Matt Mullenweg <span class="font-normal text-slate-400">(co-founder WordPress)</span>
+                        </footer>
+                    </blockquote>
+                    <div class="mt-6 w-16 h-1 bg-[#00A3A3] mx-auto rounded-full"></div>
+                </div>
+
+                <!-- Functionele Eisen Interactive Checklist (Volgens Mockup) -->
+                <div id="checklist-section" class="mt-16 bg-white rounded-xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+                        <div>
+                            <h2 class="text-gray-900 flex items-center gap-2">
+                                <i class="fa-solid fa-square-check text-[#00A3A3]"></i>
+                                Functionele eisen (checklist)
+                            </h2>
+                            <p class="text-slate-500 text-sm mt-1">
+                                Klik op de voorwaarden om het op te volgen of uit te testen.
+                            </p>
+                        </div>
+                        <div class="flex items-center space-x-3 bg-slate-50 p-3 rounded-lg border border-slate-200">
+                            <span class="text-xs font-semibold uppercase text-slate-500">Status:</span>
+                            <span id="checklist-counter" class="font-bold text-[#083D91] text-sm">0 / 10 Voldaan</span>
+                            <button onclick="resetChecklist()" class="text-xs text-slate-400 hover:text-red-500 transition-colors ml-2" title="Checklist herstellen">
+                                <i class="fa-solid fa-rotate-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6" id="checklist-items-container">
+                        <!-- Checklist items auto-populated by JS -->
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================= MITNICK GAMES VIEW ================= -->
+        <section id="view-mitnick" class="view-section">
+            <!-- Hero Banner -->
+            <div class="relative bg-slate-900 text-white overflow-hidden py-14 sm:py-16">
+                <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1600&q=80" alt="Hacking contest" class="absolute inset-0 w-full h-full object-cover opacity-25">
+                <div class="absolute inset-0 hero-overlay-mitnick"></div>
+                
+                <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <a href="#home" onclick="navigateTo('home')" class="inline-flex items-center text-teal-300 hover:text-white text-sm font-medium mb-4 transition-colors">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Terug naar overzicht
+                    </a>
+                    <h1 class="text-white mb-2">Kevin Mitnick Games</h1>
+                    <p class="text-xl text-[#F4B400] font-bold">Think like a hacker. Learn like a pro.</p>
+                </div>
+            </div>
+
+            <!-- Content Container -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    
+                    <!-- Left: Over de wedstrijd -->
+                    <div class="lg:col-span-7 bg-white p-6 sm:p-8 rounded-xl border border-slate-200 shadow-sm space-y-6">
+                        <h2 class="text-[#083D91] border-b border-slate-100 pb-3">Over de wedstrijd</h2>
+                        <p class="text-slate-700 leading-relaxed">
+                            De <strong>Kevin Mitnick Games</strong> is de jaarlijkse hackingcontest van Oost-Vlaanderen. Teams nemen het op tegen uitdagende opdrachten rond cybersecurity, netwerken, cryptografie en logica.
+                        </p>
+                        <div class="bg-slate-50 p-5 rounded-lg border-l-4 border-[#083D91] space-y-3">
+                            <div class="font-bold text-slate-800 text-sm uppercase tracking-wider">Kerngebieden van de challenges:</div>
+                            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-slate-700">
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-shield-halved text-[#00A3A3]"></i> Ethical Hacking</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-key text-[#00A3A3]"></i> Cryptografie</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-network-wired text-[#00A3A3]"></i> Pakketanalyse</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-brain text-[#00A3A3]"></i> Logische raadsels</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Afbeelding -->
+                        <div class="pt-2">
+                            <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80" alt="Cybersecurity slot en beveiliging" class="rounded-lg w-full h-56 object-cover shadow-inner">
+                        </div>
+                    </div>
+
+                    <!-- Right: Wall of Fame met interactieve jaarselector -->
+                    <div class="lg:col-span-5 bg-white p-6 sm:p-8 rounded-xl border border-slate-200 shadow-sm space-y-6">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3 text-[#083D91]">
+                                <i class="fa-solid fa-trophy text-2xl text-[#F4B400]"></i>
+                                <h2>Wall of Fame</h2>
+                            </div>
+                            <span class="text-xs bg-amber-100 text-amber-800 font-bold px-2.5 py-1 rounded-full">Sint-Franciscus</span>
+                        </div>
+                        
+                        <p class="text-sm text-slate-500">Klik op een editietafel om de volledige winnaarsdetails en behaalde scores te bekijken:</p>
+
+                        <!-- Year Selectors -->
+                        <div class="flex rounded-lg bg-slate-100 p-1 space-x-1" id="mitnick-year-tabs">
+                            <button onclick="selectMitnickYear('2024')" id="mitnick-tab-2024" class="flex-1 py-2 text-xs sm:text-sm font-bold rounded-md transition-all text-slate-600 hover:text-slate-900">2024</button>
+                            <button onclick="selectMitnickYear('2025')" id="mitnick-tab-2025" class="flex-1 py-2 text-xs sm:text-sm font-bold rounded-md transition-all text-slate-600 hover:text-slate-900">2025</button>
+                            <button onclick="selectMitnickYear('2026')" id="mitnick-tab-2026" class="flex-1 py-2 text-xs sm:text-sm font-bold rounded-md transition-all bg-[#083D91] text-white shadow-sm">2026</button>
+                        </div>
+
+                        <!-- Dynamic Wall of Fame Details Card -->
+                        <div id="mitnick-details-card" class="bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-4">
+                            <!-- Populated by JS -->
+                        </div>
+
+                        <button onclick="openScoreboardModal()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-[#083D91] font-bold text-sm rounded-lg transition-colors flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-list-ol"></i>
+                            <span>Bekijk uitdagingen & scoreoverzicht</span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= GITHUB VIEW ================= -->
+        <section id="view-github" class="view-section">
+            <!-- Hero Banner -->
+            <div class="relative bg-slate-900 text-white overflow-hidden py-14 sm:py-16">
+                <img src="https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?auto=format&fit=crop&w=1600&q=80" alt="GitHub ontwikkelaars" class="absolute inset-0 w-full h-full object-cover opacity-20">
+                <div class="absolute inset-0 hero-overlay-github"></div>
+                
+                <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <a href="#home" onclick="navigateTo('home')" class="inline-flex items-center text-teal-300 hover:text-white text-sm font-medium mb-4 transition-colors">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Terug naar overzicht
+                    </a>
+                    <h1 class="text-white mb-2">GitHub basisvaardigheden</h1>
+                    <p class="text-xl text-[#00A3A3] font-bold">Code together. Build further.</p>
+                </div>
+            </div>
+
+            <!-- Content Container -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
+                
+                <!-- Wat leer je? & Progress -->
+                <div class="bg-white p-6 sm:p-8 rounded-xl border border-slate-200 shadow-sm grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                    <div class="md:col-span-8 space-y-4">
+                        <h2 class="text-[#083D91]">Wat leer je?</h2>
+                        <p class="text-slate-700 leading-relaxed">
+                            In 8 interactieve lessen ontdek je de meest waardevolle tool van developers: <strong>GitHub</strong>. Je leert samenwerken, versies beheren, pull requests gebruiken en professioneel werken aan projecten.
+                        </p>
+                        
+                        <!-- Voortgangsbalk (Progress Bar) -->
+                        <div class="pt-2">
+                            <div class="flex justify-between items-center text-sm mb-1.5 font-semibold">
+                                <span class="text-slate-700">Jouw voortgang (8 onderwerpen):</span>
+                                <span id="github-progress-text" class="text-[#00A3A3]">0% voltooid (0/8)</span>
+                            </div>
+                            <div class="w-full bg-slate-200 h-3 rounded-full overflow-hidden">
+                                <div id="github-progress-bar" class="bg-[#00A3A3] h-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:col-span-4 flex justify-center">
+                        <div class="p-6 bg-slate-900 text-white rounded-2xl shadow-lg text-center w-full max-w-xs space-y-3">
+                            <i class="fa-brands fa-github text-6xl text-white"></i>
+                            <div class="text-xs font-mono text-teal-400">Git & GitHub Interactive</div>
+                            <div class="text-xs text-slate-400">Klik op een onderwerp hieronder om de lesmodule te starten!</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 8 Interactive Topics Grid -->
+                <div class="space-y-6">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-gray-900">Onderwerpen (Klik voor details & opdrachten)</h2>
+                        <span class="text-xs text-slate-500 italic hidden sm:inline"><i class="fa-solid fa-pointer mr-1"></i> Klik op een tegel</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="github-topics-grid">
+                        <!-- Populated dynamically with JavaScript -->
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================= NOKIA VIEW ================= -->
+        <section id="view-nokia" class="view-section">
+            <!-- Hero Banner -->
+            <div class="relative bg-slate-900 text-white overflow-hidden py-14 sm:py-16">
+                <img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=1600&q=80" alt="Nokia Telecom netwerken" class="absolute inset-0 w-full h-full object-cover opacity-30">
+                <div class="absolute inset-0 hero-overlay-nokia"></div>
+                
+                <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <a href="#home" onclick="navigateTo('home')" class="inline-flex items-center text-teal-300 hover:text-white text-sm font-medium mb-4 transition-colors">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Terug naar overzicht
+                    </a>
+                    <h1 class="text-white mb-2">Nokia telecomthuisnetwerk</h1>
+                    <p class="text-xl text-[#F4B400] font-bold">Van theorie naar de echte wereld.</p>
+                </div>
+            </div>
+
+            <!-- Content Container -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    
+                    <!-- Left: Over het bezoek -->
+                    <div class="lg:col-span-7 bg-white p-6 sm:p-8 rounded-xl border border-slate-200 shadow-sm space-y-6">
+                        <h2 class="text-[#083D91] border-b border-slate-100 pb-3">Over het bezoek</h2>
+                        <p class="text-slate-700 leading-relaxed">
+                            We verdiepen ons in communicatienetwerken en krijgen een unieke blik achter de schermen bij <strong>Nokia in Antwerpen</strong>. Je ontdekt hoe netwerktechnologie in de praktijk werkt en welke carrièremogelijkheden er zijn.
+                        </p>
+                        
+                        <!-- Afbeelding -->
+                        <div class="pt-2">
+                            <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=80" alt="Netwerk- en telecom engineering" class="rounded-lg w-full h-60 object-cover shadow-inner">
+                        </div>
+
+                        <!-- Dagprogramma Timeline -->
+                        <div class="pt-4 border-t border-slate-100">
+                            <h3 class="text-gray-900 text-lg mb-4">Programma van het bedrijfsbezoek</h3>
+                            <div class="space-y-3 text-sm">
+                                <div class="flex items-start gap-3">
+                                    <span class="bg-blue-100 text-[#083D91] font-bold px-2.5 py-1 rounded text-xs font-mono">09:30</span>
+                                    <div><strong class="text-slate-800">Ontvangst & Keynote:</strong> Introductie in 5G, glasvezel en mobiele infrastructuren.</div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="bg-blue-100 text-[#083D91] font-bold px-2.5 py-1 rounded text-xs font-mono">11:00</span>
+                                    <div><strong class="text-slate-800">Rondleiding in Innovation Labs:</strong> Demonstraties van glasvezelmodems & router-hardware.</div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="bg-blue-100 text-[#083D91] font-bold px-2.5 py-1 rounded text-xs font-mono">13:30</span>
+                                    <div><strong class="text-slate-800">Workshops & Q&A:</strong> Gesprekken met netwerk-engineers en oud-studenten.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Interactive Info Cards -->
+                    <div class="lg:col-span-5 space-y-4">
+                        <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Klik op de kaarten voor details</div>
+                        
+                        <!-- Locatie Card -->
+                        <div onclick="openNokiaInfoModal('locatie')" class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-start space-x-4 cursor-pointer hover:border-[#083D91] hover:shadow-md transition-all group">
+                            <div class="p-3.5 bg-blue-50 text-[#083D91] rounded-xl group-hover:bg-[#083D91] group-hover:text-white transition-colors">
+                                <i class="fa-solid fa-location-dot text-2xl"></i>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-gray-900 text-lg">Locatie</h3>
+                                    <i class="fa-solid fa-chevron-right text-xs text-slate-400 group-hover:translate-x-1 transition-transform"></i>
+                                </div>
+                                <p class="text-sm text-slate-600 mt-0.5">Nokia Antwerpen (Copernicuslaan)</p>
+                                <span class="text-xs text-[#00A3A3] font-semibold mt-2 inline-block">Route & bereikbaarheid bekijken →</span>
+                            </div>
+                        </div>
+
+                        <!-- Focus Card -->
+                        <div onclick="openNokiaInfoModal('focus')" class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-start space-x-4 cursor-pointer hover:border-[#00A3A3] hover:shadow-md transition-all group">
+                            <div class="p-3.5 bg-teal-50 text-[#00A3A3] rounded-xl group-hover:bg-[#00A3A3] group-hover:text-white transition-colors">
+                                <i class="fa-solid fa-bullseye text-2xl"></i>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-gray-900 text-lg">Focus</h3>
+                                    <i class="fa-solid fa-chevron-right text-xs text-slate-400 group-hover:translate-x-1 transition-transform"></i>
+                                </div>
+                                <p class="text-sm text-slate-600 mt-0.5">Telecom, netwerken, 5G, innovatie</p>
+                                <span class="text-xs text-[#00A3A3] font-semibold mt-2 inline-block">Technologieën bekijken →</span>
+                            </div>
+                        </div>
+
+                        <!-- Praktisch Card -->
+                        <div onclick="openNokiaInfoModal('praktisch')" class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-start space-x-4 cursor-pointer hover:border-amber-400 hover:shadow-md transition-all group">
+                            <div class="p-3.5 bg-amber-50 text-amber-600 rounded-xl group-hover:bg-amber-500 group-hover:text-white transition-colors">
+                                <i class="fa-solid fa-circle-info text-2xl"></i>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-gray-900 text-lg">Praktisch</h3>
+                                    <i class="fa-solid fa-chevron-right text-xs text-slate-400 group-hover:translate-x-1 transition-transform"></i>
+                                </div>
+                                <p class="text-sm text-slate-600 mt-0.5">Info volgt via de leerkracht.</p>
+                                <span class="text-xs text-amber-600 font-semibold mt-2 inline-block">Meebrengen & richtlijnen →</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#083D91] text-white border-t border-blue-900/50 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+                <div>
+                    <div class="font-bold text-base">Sint-Franciscus Evergem</div>
+                    <div class="text-xs text-slate-300 mt-1">5 ICW – 2026-2027 | <span class="text-amber-300">Meer dan hardware alleen.</span></div>
+                </div>
+
+                <div class="text-xs text-slate-300">
+                    Sint-Franciscus Evergem • Leren. Groeien. Verbinden.
+                </div>
+
+                <!-- Social Links -->
+                <div class="flex items-center space-x-5 text-xl">
+                    <a href="https://github.com" target="_blank" rel="noopener noreferrer" title="GitHub" class="text-slate-300 hover:text-white transition-colors">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                    <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" title="YouTube" class="text-slate-300 hover:text-white transition-colors">
+                        <i class="fa-brands fa-youtube"></i>
+                    </a>
+                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="text-slate-300 hover:text-white transition-colors">
+                        <i class="fa-brands fa-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Dynamic Topic Modal (GitHub Onderwerpen) -->
+    <div id="topic-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden border border-slate-200 max-h-[90vh] flex flex-col">
+            <div class="p-6 bg-[#083D91] text-white flex justify-between items-start">
+                <div>
+                    <span id="modal-topic-number" class="bg-[#00A3A3] text-white text-xs font-bold px-2.5 py-1 rounded mb-2 inline-block">Onderwerp 1</span>
+                    <h2 id="modal-topic-title" class="text-xl sm:text-2xl text-white font-bold">Topic Title</h2>
+                </div>
+                <button onclick="closeTopicModal()" class="text-white/80 hover:text-white text-xl p-1">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <div class="p-6 overflow-y-auto space-y-6 flex-grow text-slate-700 text-sm">
+                <div>
+                    <h3 class="text-gray-900 text-base font-bold mb-2">Theorie & Uitleg</h3>
+                    <p id="modal-topic-desc" class="leading-relaxed text-slate-600">Details...</p>
+                </div>
+
+                <div id="modal-code-block" class="bg-slate-900 text-teal-300 p-4 rounded-xl font-mono text-xs overflow-x-auto space-y-1">
+                    <!-- Code snippet -->
+                </div>
+
+                <div class="bg-amber-50 p-4 rounded-xl border border-amber-200">
+                    <h3 class="text-amber-900 text-sm font-bold flex items-center gap-2 mb-1">
+                        <i class="fa-solid fa-laptop-code text-amber-600"></i> Praktijkopdracht
+                    </h3>
+                    <p id="modal-topic-assignment" class="text-amber-800 text-xs leading-relaxed">Opdrachtomschrijving...</p>
+                </div>
+            </div>
+
+            <div class="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+                <label class="flex items-center space-x-3 cursor-pointer select-none">
+                    <input type="checkbox" id="modal-topic-checkbox" onchange="toggleCurrentTopicCompletion()" class="w-5 h-5 text-[#00A3A3] rounded border-slate-300 focus:ring-[#00A3A3]">
+                    <span class="font-semibold text-slate-800 text-sm">Markeer als voltooid</span>
+                </label>
+                <button onclick="closeTopicModal()" class="px-5 py-2.5 bg-[#083D91] text-white font-bold text-sm rounded-lg hover:bg-blue-900 transition-colors">
+                    Sluiten
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nokia Info Modal -->
+    <div id="nokia-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden border border-slate-200">
+            <div class="p-6 bg-[#083D91] text-white flex justify-between items-center">
+                <h2 id="nokia-modal-title" class="text-xl text-white font-bold">Nokia Details</h2>
+                <button onclick="closeNokiaModal()" class="text-white/80 hover:text-white text-xl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div id="nokia-modal-content" class="p-6 space-y-4 text-slate-700 text-sm">
+                <!-- Populated by JS -->
+            </div>
+            <div class="p-4 bg-slate-50 border-t border-slate-100 text-right">
+                <button onclick="closeNokiaModal()" class="px-4 py-2 bg-slate-200 text-slate-800 font-bold text-xs rounded-lg hover:bg-slate-300">Sluiten</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mitnick Scoreboard Modal -->
+    <div id="scoreboard-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden border border-slate-200 max-h-[85vh] flex flex-col">
+            <div class="p-6 bg-[#083D91] text-white flex justify-between items-center">
+                <div>
+                    <h2 class="text-xl text-white font-bold">Mitnick Games - Challenges & Scoreboard</h2>
+                    <p class="text-xs text-teal-200 mt-1">Overzicht van de opdrachten & puntentelling</p>
+                </div>
+                <button onclick="closeScoreboardModal()" class="text-white/80 hover:text-white text-xl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto space-y-4 text-sm">
+                <div class="grid grid-cols-1 gap-3">
+                    <div class="p-3.5 bg-slate-50 rounded-lg border border-slate-200 flex justify-between items-center">
+                        <div>
+                            <div class="font-bold text-gray-900">Challenge 1: Decryptie & Ciphers</div>
+                            <div class="text-xs text-slate-500">Caesar, Vigenère & Base64 raadsels ontrafelen</div>
+                        </div>
+                        <span class="font-mono font-bold text-xs bg-teal-100 text-teal-800 px-2 py-1 rounded">250 Ptn</span>
+                    </div>
+                    <div class="p-3.5 bg-slate-50 rounded-lg border border-slate-200 flex justify-between items-center">
+                        <div>
+                            <div class="font-bold text-gray-900">Challenge 2: Wireshark Packet Sniffing</div>
+                            <div class="text-xs text-slate-500">Verborgen wachtwoorden ophalen uit pcap-files</div>
+                        </div>
+                        <span class="font-mono font-bold text-xs bg-teal-100 text-teal-800 px-2 py-1 rounded">350 Ptn</span>
+                    </div>
+                    <div class="p-3.5 bg-slate-50 rounded-lg border border-slate-200 flex justify-between items-center">
+                        <div>
+                            <div class="font-bold text-gray-900">Challenge 3: Port Scanning & SSH Binnendringen</div>
+                            <div class="text-xs text-slate-500">Nmap scans uitvoeren op kwetsbare virtuele servers</div>
+                        </div>
+                        <span class="font-mono font-bold text-xs bg-teal-100 text-teal-800 px-2 py-1 rounded">500 Ptn</span>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 bg-slate-50 border-t border-slate-100 text-right">
+                <button onclick="closeScoreboardModal()" class="px-4 py-2 bg-[#083D91] text-white font-bold text-xs rounded-lg">Sluiten</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Search Modal -->
+    <div id="search-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-start justify-center pt-16 sm:pt-20 px-4">
+        <div class="bg-white w-full max-w-xl rounded-2xl shadow-2xl overflow-hidden border border-slate-200">
+            <div class="p-4 border-b border-slate-200 flex items-center space-x-3 bg-slate-50">
+                <i class="fa-solid fa-magnifying-glass text-slate-400 text-lg"></i>
+                <input type="text" id="search-input" onkeyup="handleSearch()" placeholder="Zoek onderwerpen, opdrachten, winnaars, Nokia info..." class="w-full bg-transparent focus:outline-none text-slate-800 placeholder-slate-400 font-medium">
+                <button onclick="closeSearchModal()" class="text-slate-400 hover:text-slate-600 text-xs font-bold px-2 py-1 bg-slate-200 rounded">ESC</button>
+            </div>
+            <div id="search-results" class="max-h-80 overflow-y-auto p-4 space-y-2 text-sm">
+                <div class="text-xs text-slate-400 italic">Typ een trefwoord zoals 'Git', 'Mitnick', 'Nokia', '2025' of 'Checklist'...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 8 Interactive GitHub Topics Data
+        const githubTopicsData = [
+            {
+                id: 1,
+                title: "Repositories en cloning",
+                desc: "Een repository (repo) is de opslagplaats voor jouw project. Met het clone-commando kopieer je de remote repository van GitHub rechtstreeks naar jouw lokale computer om eraan te werken.",
+                code: "git clone https://github.com/sint-franciscus/hardware-project.git\ncd hardware-project\ngit status",
+                assignment: "Kloon de voorbeeld-repository naar je lokale pc en controleer de status via de terminal met 'git status'."
+            },
+            {
+                id: 2,
+                title: "Branches en merging",
+                desc: "Branches (takken) laten je toe om veilig te werken aan nieuwe functionaliteiten zonder de hoofdcode (main) te verstoren. Merging voegt je goedgekeurde branch weer samen met main.",
+                code: "git checkout -b feature/sensor-uitlezen\n# Werk aan je code...\ngit commit -am 'Sensor code toegevoegd'\ngit checkout main\ngit merge feature/sensor-uitlezen",
+                assignment: "Maak een nieuwe branch 'feature/jouwnaam', breng een kleine wijziging aan in een bestand en voer een commit uit."
+            },
+            {
+                id: 3,
+                title: "Pull requests en code review",
+                desc: "Een Pull Request (PR) is een verzoek om jouw branch over te zetten naar de main-branch. Klasgenoten of leerkrachten kunnen je code nakijken, opmerkingen geven en goedkeuren.",
+                code: "git push origin feature/jouwnaam\n# Open daarna GitHub.com -> 'New Pull Request'",
+                assignment: "Push je branch naar GitHub en open een Pull Request. Vraag een klasgenoot om minstens 1 opmerking te geven."
+            },
+            {
+                id: 4,
+                title: "Issues en projectbeheer",
+                desc: "Met GitHub Issues hou je taken, bugs en ideeën bij. Je kunt ze toewijzen aan teamleden en koppelen aan een Kanban-projectbord.",
+                code: "# Voorbeeld Issue titel:\n'Bug: Temperatuursensor geeft negatieve waarde bij 20 graden'\nLabels: bug, hardware",
+                assignment: "Maak een Issue aan in de oefen-repo over een gesimuleerde hardwarefout en koppel deze aan een klasgenoot."
+            },
+            {
+                id: 5,
+                title: ".gitignore en best practices",
+                desc: "Met een .gitignore bestand voorkom je dat tijdelijke bestanden, geheime sleutels, wachtwoorden of zware build-bestanden per ongeluk geüpload worden naar GitHub.",
+                code: "# .gitignore bestand inhoud:\nnode_modules/\n*.log\nconfig.secrets.json\n.DS_Store",
+                assignment: "Maak een .gitignore bestand aan in je repository en sluit alle .log bestanden uit van versiebeheer."
+            },
+            {
+                id: 6,
+                title: "Samenwerken in teams",
+                desc: "Samenwerken vereist goeie afspraken: altijd eerst 'git pull' uitvoeren voordat je begint te werken, duidelijke commit-berichten schrijven en duidelijke taakverdeling via issues.",
+                code: "git pull origin main\n# Altijd de nieuwste wijzigingen ophalen voor je bouwt!",
+                assignment: "Simuleer een team-workflow: haal de laatste updates op van een medestudent en voeg jouw bijdrage toe."
+            },
+            {
+                id: 7,
+                title: "Conflicten oplossing (Merge conflicts)",
+                desc: "Wanneer twee teamleden dezelfde regel code op hetzelfde moment veranderen, ontstaat een merge conflict. Git vraagt jou om handmatig te kiezen welke code juist is.",
+                code: "<<<<<<< HEAD\nconst sensorPin = 12;\n=======\nconst sensorPin = 14;\n>>>>>>> feature/nieuwe-pin",
+                assignment: "Los een gesimuleerd merge conflict op in VS Code door de juiste code-versie te kiezen en te committen."
+            },
+            {
+                id: 8,
+                title: "GitHub in de echte wereld",
+                desc: "Bedrijven gebruiken GitHub Actions voor CI/CD (automatisering) en testen. GitHub is bovendien jouw digitaal portfolio om te tonen aan werkgevers en hogescholen.",
+                code: "# .github/workflows/test.yml\nname: Hardware Code Check\non: [push]\njobs:\n  build:\n    runs-on: ubuntu-latest",
+                assignment: "Verken hoe GitHub Actions automatisch kan controleren of code foutloos compileert."
+            }
+        ];
+
+        // Track completed topics locally
+        let completedTopics = new Set();
+        let activeModalTopicId = null;
+
+        // Wall of Fame Data per year
+        const mitnickWinnersData = {
+            '2024': {
+                names: "Devos Leon en Sarah Bonne",
+                rank: "1e Plaats (Oost-Vlaanderen)",
+                score: "1450 Punten",
+                highlights: "Snelste decryptie van de RSA-challenge & perfecte score op netwerkanalyse."
+            },
+            '2025': {
+                names: "Alboort Lars",
+                rank: "1e Plaats (Individueel Categorie)",
+                score: "1320 Punten",
+                highlights: "Uitblinker in reverse engineering & hardware exploitatie."
+            },
+            '2026': {
+                names: "Boone Vic",
+                rank: "1e Plaats (Current Champion)",
+                score: "1580 Punten",
+                highlights: "Recordtijd op de port-scanning en SSH penetration challenge!"
+            }
+        };
+
+        // Interactive Functional Requirements Checklist Data
+        const checklistItems = [
+            { id: 1, label: "4 pagina's: index.html, mitnick.html, github.html, nokia.html", checked: true },
+            { id: 2, label: "Identieke header en footer op alle pagina's", checked: true },
+            { id: 3, label: "Responsief design (desktop, tablet, mobiel)", checked: true },
+            { id: 4, label: "Duidelijke en werkende navigatie", checked: true },
+            { id: 5, label: "Minstens 3 media bestanden (afbeeldingen)", checked: true },
+            { id: 6, label: "Alle afbeeldingen hebben een alt-tekst", checked: true },
+            { id: 7, label: "Minstens 1 CSS-bestand / Tailwind stijlen", checked: true },
+            { id: 8, label: "Consistent kleurgebruik en typografie (Poppins)", checked: true },
+            { id: 9, label: "Geen horizontale scrollbar", checked: true },
+            { id: 10, label: "Toegankelijke en leesbare lay-out", checked: true }
+        ];
+
+        // SPA Routing
+        function navigateTo(viewId) {
+            document.querySelectorAll('.view-section').forEach(view => view.classList.remove('active'));
+
+            const targetView = document.getElementById('view-' + viewId);
+            if (targetView) {
+                targetView.classList.add('active');
+            }
+
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+
+            const activeNav = document.getElementById('nav-' + viewId);
+            if (activeNav) {
+                activeNav.classList.add('active');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if (history.pushState) {
+                history.pushState(null, null, '#' + viewId);
+            }
+        }
+
+        // Render GitHub topics
+        function renderGitHubTopics() {
+            const container = document.getElementById('github-topics-grid');
+            if (!container) return;
+
+            container.innerHTML = githubTopicsData.map(topic => {
+                const isDone = completedTopics.has(topic.id);
+                return `
+                    <div onclick="openTopicModal(${topic.id})" class="topic-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-start space-x-3 ${isDone ? 'completed' : ''}">
+                        <span class="flex-shrink-0 w-8 h-8 rounded-full ${isDone ? 'bg-green-500 text-white' : topic.id <= 4 ? 'bg-[#00A3A3] text-white' : 'bg-[#083D91] text-white'} flex items-center justify-center font-bold text-sm">
+                            ${isDone ? '<i class="fa-solid fa-check text-xs"></i>' : topic.id}
+                        </span>
+                        <div class="flex-grow min-w-0">
+                            <h3 class="font-bold text-gray-900 text-sm truncate">${topic.title}</h3>
+                            <p class="text-xs text-slate-500 mt-1 line-clamp-2">${topic.desc}</p>
+                            <span class="inline-block mt-3 text-[11px] font-semibold text-[#00A3A3] hover:underline">
+                                Details & opdracht →
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            updateGitHubProgress();
+        }
+
+        function updateGitHubProgress() {
+            const total = githubTopicsData.length;
+            const done = completedTopics.size;
+            const percent = Math.round((done / total) * 100);
+
+            const bar = document.getElementById('github-progress-bar');
+            const text = document.getElementById('github-progress-text');
+
+            if (bar) bar.style.width = percent + '%';
+            if (text) text.innerText = `${percent}% voltooid (${done}/${total})`;
+        }
+
+        function openTopicModal(id) {
+            const topic = githubTopicsData.find(t => t.id === id);
+            if (!topic) return;
+
+            activeModalTopicId = id;
+
+            document.getElementById('modal-topic-number').innerText = `Onderwerp ${topic.id} van 8`;
+            document.getElementById('modal-topic-title').innerText = topic.title;
+            document.getElementById('modal-topic-desc').innerText = topic.desc;
+            document.getElementById('modal-code-block').innerText = topic.code;
+            document.getElementById('modal-topic-assignment').innerText = topic.assignment;
+
+            const checkbox = document.getElementById('modal-topic-checkbox');
+            checkbox.checked = completedTopics.has(id);
+
+            document.getElementById('topic-modal').classList.remove('hidden');
+        }
+
+        function closeTopicModal() {
+            document.getElementById('topic-modal').classList.add('hidden');
+            activeModalTopicId = null;
+        }
+
+        function toggleCurrentTopicCompletion() {
+            if (!activeModalTopicId) return;
+
+            if (completedTopics.has(activeModalTopicId)) {
+                completedTopics.delete(activeModalTopicId);
+            } else {
+                completedTopics.add(activeModalTopicId);
+            }
+
+            renderGitHubTopics();
+        }
+
+        // Mitnick Games Year Selector
+        function selectMitnickYear(year) {
+            const data = mitnickWinnersData[year];
+            if (!data) return;
+
+            // Update tab styles
+            ['2024', '2025', '2026'].forEach(y => {
+                const tab = document.getElementById(`mitnick-tab-${y}`);
+                if (tab) {
+                    if (y === year) {
+                        tab.className = "flex-1 py-2 text-xs sm:text-sm font-bold rounded-md transition-all bg-[#083D91] text-white shadow-sm";
+                    } else {
+                        tab.className = "flex-1 py-2 text-xs sm:text-sm font-bold rounded-md transition-all text-slate-600 hover:text-slate-900";
+                    }
+                }
+            });
+
+            // Update content card
+            const container = document.getElementById('mitnick-details-card');
+            if (container) {
+                container.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs font-mono font-bold text-[#00A3A3] uppercase">Editie ${year} Winnaar</span>
+                            <div class="text-lg font-bold text-slate-900 mt-0.5">${data.names}</div>
+                        </div>
+                        <span class="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-1 rounded-full">${data.rank}</span>
+                    </div>
+                    <div class="text-xs text-slate-600 leading-relaxed border-t border-slate-200/80 pt-3">
+                        <strong>Prestatie:</strong> ${data.highlights}
+                    </div>
+                    <div class="flex items-center justify-between text-xs font-mono text-slate-500 pt-1">
+                        <span>Behaalde score:</span>
+                        <span class="font-bold text-[#083D91] text-sm">${data.score}</span>
+                    </div>
+                `;
+            }
+        }
+
+        // Nokia Info Modal Details
+        function openNokiaInfoModal(type) {
+            const modal = document.getElementById('nokia-modal');
+            const title = document.getElementById('nokia-modal-title');
+            const content = document.getElementById('nokia-modal-content');
+
+            if (type === 'locatie') {
+                title.innerText = "Locatie - Nokia Antwerpen";
+                content.innerHTML = `
+                    <div class="space-y-3">
+                        <p><strong>Adres:</strong> Copernicuslaan 50, 2018 Antwerpen</p>
+                        <p class="text-xs text-slate-600">Gelegen vlak bij het station Antwerpen-Centraal. We reizen in groep per trein vanuit station Evergem.</p>
+                        <div class="bg-slate-100 p-3 rounded-lg text-xs font-mono text-slate-700">
+                            <i class="fa-solid fa-train text-[#083D91] mr-1"></i> Vertrek station Evergem: 08:15 (stipt!)
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'focus') {
+                title.innerText = "Focus & Technologieën";
+                content.innerHTML = `
+                    <div class="space-y-2">
+                        <p>Tijdens het bezoek staan de nieuwste telecom-ontwikkelingen centraal:</p>
+                        <ul class="list-disc list-inside text-xs space-y-1 text-slate-600">
+                            <li><strong>5G & 6G netwerken:</strong> Hoge snelheden en ultra-lage latency.</li>
+                            <li><strong>FTTH (Fiber to the Home):</strong> Glasvezeltechnologie voor thuisnetwerken.</li>
+                            <li><strong>Cybersecurity in Telecom:</strong> Beschermen van kritieke netwerkinfrastructuur.</li>
+                        </ul>
+                    </div>
+                `;
+            } else if (type === 'praktisch') {
+                title.innerText = "Praktische Afspraken";
+                content.innerHTML = `
+                    <div class="space-y-3">
+                        <p><strong>Belangrijke richtlijnen:</strong></p>
+                        <ul class="list-disc list-inside text-xs space-y-1.5 text-slate-600">
+                            <li>Breng je <strong>identiteitskaart (eID)</strong> mee voor toegang bij de receptie.</li>
+                            <li>Fotograferen is enkel toegestaan in de aangeduide Innovation Zones.</li>
+                            <li>Middaglunch wordt voorzien door Nokia.</li>
+                        </ul>
+                    </div>
+                `;
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeNokiaModal() {
+            document.getElementById('nokia-modal').classList.add('hidden');
+        }
+
+        function openScoreboardModal() {
+            document.getElementById('scoreboard-modal').classList.remove('hidden');
+        }
+
+        function closeScoreboardModal() {
+            document.getElementById('scoreboard-modal').classList.add('hidden');
+        }
+
+        // Functional Checklist rendering & state
+        function renderChecklist() {
+            const container = document.getElementById('checklist-items-container');
+            if (!container) return;
+
+            let checkedCount = 0;
+
+            container.innerHTML = checklistItems.map(item => {
+                if (item.checked) checkedCount++;
+                return `
+                    <div onclick="toggleChecklistItem(${item.id})" class="p-3.5 rounded-lg border flex items-center justify-between cursor-pointer transition-colors ${item.checked ? 'bg-teal-50/50 border-teal-300' : 'bg-slate-50 border-slate-200'}">
+                        <div class="flex items-center space-x-3">
+                            <input type="checkbox" ${item.checked ? 'checked' : ''} class="w-4 h-4 text-[#00A3A3] rounded border-slate-300 focus:ring-[#00A3A3] pointer-events-none">
+                            <span class="text-sm font-medium ${item.checked ? 'text-slate-900' : 'text-slate-500'}">${item.label}</span>
+                        </div>
+                        <span class="text-xs font-bold ${item.checked ? 'text-[#00A3A3]' : 'text-slate-400'}">
+                            ${item.checked ? '<i class="fa-solid fa-check"></i> OK' : 'Getest'}
+                        </span>
+                    </div>
+                `;
+            }).join('');
+
+            const counter = document.getElementById('checklist-counter');
+            if (counter) {
+                counter.innerText = `${checkedCount} / ${checklistItems.length} Voldaan`;
+            }
+        }
+
+        function toggleChecklistItem(id) {
+            const item = checklistItems.find(i => i.id === id);
+            if (item) {
+                item.checked = !item.checked;
+                renderChecklist();
+            }
+        }
+
+        function resetChecklist() {
+            checklistItems.forEach(i => i.checked = true);
+            renderChecklist();
+        }
+
+        // Search Modal logic
+        function openSearchModal() {
+            const modal = document.getElementById('search-modal');
+            const input = document.getElementById('search-input');
+            modal.classList.remove('hidden');
+            input.focus();
+        }
+
+        function closeSearchModal() {
+            document.getElementById('search-modal').classList.add('hidden');
+        }
+
+        function handleSearch() {
+            const query = document.getElementById('search-input').value.toLowerCase().trim();
+            const resultsContainer = document.getElementById('search-results');
+
+            if (!query) {
+                resultsContainer.innerHTML = '<div class="text-xs text-slate-400 italic">Typ een trefwoord om te zoeken...</div>';
+                return;
+            }
+
+            const results = [];
+
+            // Search in GitHub Topics
+            githubTopicsData.forEach(t => {
+                if (t.title.toLowerCase().includes(query) || t.desc.toLowerCase().includes(query)) {
+                    results.push({
+                        type: 'GitHub Les',
+                        title: t.title,
+                        desc: t.desc,
+                        action: () => { navigateTo('github'); openTopicModal(t.id); }
+                    });
+                }
+            });
+
+            // Search in Mitnick Winners
+            Object.keys(mitnickWinnersData).forEach(y => {
+                const w = mitnickWinnersData[y];
+                if (w.names.toLowerCase().includes(query) || y.includes(query) || w.highlights.toLowerCase().includes(query)) {
+                    results.push({
+                        type: 'Mitnick Games ' + y,
+                        title: w.names,
+                        desc: w.highlights,
+                        action: () => { navigateTo('mitnick'); selectMitnickYear(y); }
+                    });
+                }
+            });
+
+            // Search general keywords
+            if ('nokia telecom antwerpen 5g'.includes(query)) {
+                results.push({
+                    type: 'Nokia Bezoek',
+                    title: 'Nokia telecomthuisnetwerk',
+                    desc: 'Bedrijfsbezoek Antwerpen & netwerktechnologie',
+                    action: () => { navigateTo('nokia'); }
+                });
+            }
+
+            if ('checklist eisen functionaliteit'.includes(query)) {
+                results.push({
+                    type: 'Checklist',
+                    title: 'Functionele eisen (checklist)',
+                    desc: 'Bekijk de 10 voorwaarden van de website',
+                    action: () => { navigateTo('home'); scrollToChecklist(); }
+                });
+            }
+
+            if (results.length === 0) {
+                resultsContainer.innerHTML = '<div class="text-sm text-slate-500 py-2">Geen zoekresultaten gevonden.</div>';
+                return;
+            }
+
+            resultsContainer.innerHTML = results.map((res, index) => `
+                <div id="search-res-${index}" class="p-3 bg-slate-50 hover:bg-blue-50 rounded-lg cursor-pointer transition-colors border border-slate-100 flex items-start justify-between">
+                    <div>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-[#00A3A3]">${res.type}</span>
+                        <div class="font-bold text-slate-900 text-sm">${res.title}</div>
+                        <div class="text-xs text-slate-500 line-clamp-1 mt-0.5">${res.desc}</div>
+                    </div>
+                    <i class="fa-solid fa-arrow-right text-xs text-slate-400 mt-2"></i>
+                </div>
+            `).join('');
+
+            // Attach event listeners dynamically
+            results.forEach((res, index) => {
+                const el = document.getElementById(`search-res-${index}`);
+                if (el) {
+                    el.onclick = () => {
+                        res.action();
+                        closeSearchModal();
+                    };
+                }
+            });
+        }
+
+        // Navigation Helper functions
+        function scrollToCards() {
+            document.getElementById('cards-section')?.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function scrollToChecklist() {
+            document.getElementById('checklist-section')?.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('menu-icon');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            } else {
+                menu.classList.add('hidden');
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            }
+        }
+
+        // Global Keyboard Shortcut for Search (Ctrl+K or Cmd+K)
+        window.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                openSearchModal();
+            }
+            if (e.key === 'Escape') {
+                closeSearchModal();
+                closeTopicModal();
+                closeNokiaModal();
+                closeScoreboardModal();
+            }
+        });
+
+        // Initialize App on load
+        window.addEventListener('load', () => {
+            renderGitHubTopics();
+            selectMitnickYear('2026');
+            renderChecklist();
+
+            const hash = window.location.hash.replace('#', '');
+            if (['home', 'mitnick', 'github', 'nokia'].includes(hash)) {
+                navigateTo(hash);
+            } else {
+                navigateTo('home');
+            }
+        });
+
+        window.addEventListener('popstate', () => {
+            const hash = window.location.hash.replace('#', '');
+            if (['home', 'mitnick', 'github', 'nokia'].includes(hash)) {
+                navigateTo(hash);
+            } else {
+                navigateTo('home');
+            }
+        });
+    </script>
+</body>
+</html>
