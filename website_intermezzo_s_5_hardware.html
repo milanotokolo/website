@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="nl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sint-Franciscus Evergem - 5 ICW Hardware</title>
+    
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            primary: '#0B3D91',    /* Donkerblauw */
+                            secondary: '#00A3A3',  /* Teal */
+                            accent: '#F4B400',     /* Geel */
+                            bg: '#F8FAFC',         /* Lichtgrijs */
+                            dark: '#1F2937'        /* Donkergrijs */
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS variables and layout tweaks -->
+    <style>
+        :root {
+            --primary: #0B3D91;
+            --secondary: #00A3A3;
+            --accent: #F4B400;
+            --bg-light: #F8FAFC;
+            --text-dark: #1F2937;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        .view-section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .view-section.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .nav-link.active {
+            color: #ffffff;
+            border-bottom: 3px solid var(--secondary);
+            font-weight: 600;
+        }
+
+        .hero-overlay {
+            background: linear-gradient(135deg, rgba(11, 61, 145, 0.92) 0%, rgba(15, 23, 42, 0.88) 100%);
+        }
+
+        .hero-overlay-mitnick {
+            background: linear-gradient(135deg, rgba(11, 61, 145, 0.92) 0%, rgba(6, 78, 59, 0.9) 100%);
+        }
+
+        .hero-overlay-github {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(11, 61, 145, 0.9) 100%);
+        }
+
+        .hero-overlay-nokia {
+            background: linear-gradient(135deg, rgba(11, 61, 145, 0.92) 0%, rgba(0, 163, 163, 0.85) 100%);
+        }
+
+        .card-hover {
+            transition: all 0.25s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -8px rgba(11, 61, 145, 0.18);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased">
+
+    <!-- Header / Navigatie -->
+    <header class="sticky top-0 z-50 bg-[#0B3D91] text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Logo & Schoolnaam -->
+                <a href="#home" onclick="navigateTo('home')" class="flex items-center space-x-3 group">
+                    <div class="bg-white p-2 rounded-lg text-[#0B3D91] font-extrabold text-xl tracking-wider shadow-sm group-hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs sm:text-sm font-semibold tracking-wider text-slate-200 uppercase">Sint-Franciscus Evergem</div>
+                        <div class="text-sm sm:text-base font-bold text-white tracking-tight">5 ICW – HARDWARE</div>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigatie -->
+                <nav class="hidden md:flex space-x-1 lg:space-x-6 items-center">
+                    <a href="#home" id="nav-home" onclick="navigateTo('home')" class="nav-link px-3 py-2 text-sm font-medium hover:text-teal-300 transition-colors active">Home</a>
+                    <a href="#mitnick" id="nav-mitnick" onclick="navigateTo('mitnick')" class="nav-link px-3 py-2 text-sm font-medium hover:text-teal-300 transition-colors">Mitnick Games</a>
+                    <a href="#github" id="nav-github" onclick="navigateTo('github')" class="nav-link px-3 py-2 text-sm font-medium hover:text-teal-300 transition-colors">GitHub</a>
+                    <a href="#nokia" id="nav-nokia" onclick="navigateTo('nokia')" class="nav-link px-3 py-2 text-sm font-medium hover:text-teal-300 transition-colors">Nokia</a>
+                </nav>
+
+                <!-- Rechter items (Zoeken & Mobiel menu toggle) -->
+                <div class="flex items-center space-x-4">
+                    <!-- Search Icon Trigger -->
+                    <button onclick="toggleSearchModal()" title="Zoeken..." class="p-2 rounded-full text-slate-200 hover:text-white hover:bg-white/10 transition-colors">
+                        <i class="fa-solid fa-magnifying-glass text-lg"></i>
+                    </button>
+
+                    <!-- Hamburger button (Mobiel) -->
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-md text-slate-200 hover:text-white hover:bg-white/10 focus:outline-none">
+                        <i class="fa-solid fa-bars text-xl" id="menu-icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobiel Navigatie Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-[#072B6B] border-t border-blue-900/50 px-4 pt-2 pb-4 space-y-1">
+            <a href="#home" onclick="navigateTo('home'); toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-blue-800">Home</a>
+            <a href="#mitnick" onclick="navigateTo('mitnick'); toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-slate-200 hover:bg-blue-800">Mitnick Games</a>
+            <a href="#github" onclick="navigateTo('github'); toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-slate-200 hover:bg-blue-800">GitHub</a>
+            <a href="#nokia" onclick="navigateTo('nokia'); toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-slate-200 hover:bg-blue-800">Nokia</a>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow">
+
+        <!-- ================= HOME VIEW ================= -->
+        <section id="view-home" class="view-section active">
+            <!-- Hero Banner -->
+            <div class="relative bg-slate-900 text-white overflow-hidden min-h-[420px] flex items-center">
+                <!-- Visual Background Image -->
+                <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1600&q=80" alt="Hardware background" class="absolute inset-0 w-full h-full object-cover opacity-30 object-center">
+                <div class="absolute inset-0 hero-overlay"></div>
+                
+                <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-8 space-y-5">
+                            <span class="inline-block px-3 py-1 bg-[#00A3A3]/30 text-teal-200 text-xs font-semibold uppercase tracking-wider rounded-full border border-[#00A3A3]/40">
+                                Informatica & Communicatiewetenschappen
+                            </span>
+                            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white leading-tight">
+                                Intermezzo's 5 Hardware
+                            </h1>
+                            <p class="text-xl sm:text-2xl font-semibold text-[#F4B400]">
+                                Meer dan hardware alleen.
+                            </p>
+                            <p class="text-slate-300 max-w-2xl text-base sm:text-lg leading-relaxed">
+                                Ontdek drie unieke leermomenten die theorie, praktijk en de echte IT-wereld samenbrengen.
+                            </p>
+                            <div class="pt-2">
+                                <a href="#cards-section" onclick="scrollToCards()" class="inline-flex items-center gap-2 bg-[#F4B400] text-gray-900 font-bold px-6 py-3.5 rounded-lg shadow-lg hover:bg-amber-400 hover:shadow-xl transition-all transform hover:-translate-y-0.5">
+                                    <span>Ontdek de intermezzo's</span>
+                                    <i class="fa-solid fa-arrow-down"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Side Tagline Visual Block -->
+                        <div class="hidden lg:col-span-4 lg:flex flex-col justify-center items-end text-right space-y-2 border-l border-white/10 pl-8">
+                            <span class="text-xs tracking-[0.3em] font-mono text-teal-300">EXPLORE</span>
+                            <span class="text-xs tracking-[0.3em] font-mono text-amber-300">LEARN</span>
+                            <span class="text-xs tracking-[0.3em] font-mono text-teal-200">HACK</span>
+                            <span class="text-xs tracking-[0.3em] font-mono text-amber-400">BUILD</span>
+                            <span class="text-xs tracking-[0.3em] font-mono text-teal-300">VISIT</span>
+                            <span class="text-xs tracking-[0.3em] font-mono text-slate-300">CONNECT</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Intermezzo Cards Grid -->
+            <div id="cards-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    
+                    <!-- Card 1: Mitnick -->
+                    <div class="bg-white rounded-xl overflow-hidden border border-slate-200/80 shadow-sm card-hover flex flex-col">
+                        <div class="h-48 overflow-hidden relative">
+                            <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=600&q=80" alt="Kevin Mitnick Games" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
+                            <span class="absolute top-3 left-3 bg-[#0B3D91] text-white text-xs font-semibold px-2.5 py-1 rounded">Intermezzo 1</span>
+                        </div>
+                        <div class="p-6 flex-grow flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">Kevin Mitnick Games</h3>
+                                <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                                    De jaarlijkse hackingcontest van Oost-Vlaanderen. Test je skills, denk creatief en los security challenges op.
+                                </p>
+                            </div>
+                            <button onclick="navigateTo('mitnick')" class="inline-flex items-center text-[#0B3D91] font-semibold text-sm hover:text-[#00A3A3] transition-colors group">
+                                <span>Lees meer</span>
+                                <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: GitHub -->
+                    <div class="bg-white rounded-xl overflow-hidden border border-slate-200/80 shadow-sm card-hover flex flex-col">
+                        <div class="h-48 overflow-hidden relative bg-slate-900 flex items-center justify-center">
+                            <img src="https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?auto=format&fit=crop&w=600&q=80" alt="GitHub Basisvaardigheden" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105 opacity-90">
+                            <span class="absolute top-3 left-3 bg-[#00A3A3] text-white text-xs font-semibold px-2.5 py-1 rounded">Intermezzo 2</span>
+                        </div>
+                        <div class="p-6 flex-grow flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">GitHub basisvaardigheden</h3>
+                                <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                                    8 interactieve lessen over de meest waardevolle tool van developers. Van clone tot pull request.
+                                </p>
+                            </div>
+                            <button onclick="navigateTo('github')" class="inline-flex items-center text-[#0B3D91] font-semibold text-sm hover:text-[#00A3A3] transition-colors group">
+                                <span>Lees meer</span>
+                                <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Nokia -->
+                    <div class="bg-white rounded-xl overflow-hidden border border-slate-200/80 shadow-sm card-hover flex flex-col">
+                        <div class="h-48 overflow-hidden relative">
+                            <img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=600&q=80" alt="Nokia Telecomthuisnetwerk" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
+                            <span class="absolute top-3 left-3 bg-[#0B3D91] text-white text-xs font-semibold px-2.5 py-1 rounded">Intermezzo 3</span>
+                        </div>
+                        <div class="p-6 flex-grow flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">Nokia telecomthuisnetwerk</h3>
+                                <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                                    Maak kennis met netwerktechnologie en breng een bezoek aan Nokia in Antwerpen.
+                                </p>
+                            </div>
+                            <button onclick="navigateTo('nokia')" class="inline-flex items-center text-[#0B3D91] font-semibold text-sm hover:text-[#00A3A3] transition-colors group">
+                                <span>Lees meer</span>
+                                <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Quote Section -->
+                <div class="mt-20 bg-white rounded-2xl p-8 sm:p-12 border border-slate-200 shadow-sm text-center relative overflow-hidden">
+                    <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 text-slate-100 text-8xl font-serif select-none pointer-events-none">“</div>
+                    <blockquote class="relative z-10">
+                        <p class="text-xl sm:text-2xl italic font-medium text-slate-800 leading-relaxed mb-4">
+                            “Technology is best when it brings people together.”
+                        </p>
+                        <footer class="text-sm font-semibold text-slate-500">
+                            Matt Mullenweg <span class="font-normal text-slate-400">(co-founder WordPress)</span>
+                        </footer>
+                    </blockquote>
+                    <div class="mt-6 w-16 h-1 bg-[#00A3A3] mx-auto rounded-full"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= MITNICK GAMES VIEW ================= -->
+        <section id="view-mitnick" class="view-section">
+            <!-- Hero Banner -->
+            <div class="relative bg-slate-900 text-white overflow-hidden py-16">
+                <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1600&q=80" alt="Hacker theme" class="absolute inset-0 w-full h-full object-cover opacity-25">
+                <div class="absolute inset-0 hero-overlay-mitnick"></div>
+                
+                <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <a href="#home" onclick="navigateTo('home')" class="inline-flex items-center text-teal-300 hover:text-white text-sm font-medium mb-4 transition-colors">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Terug naar overzicht
+                    </a>
+                    <h1 class="text-3xl sm:text-5xl font-bold tracking-tight text-white mb-3">Kevin Mitnick Games</h1>
+                    <p class="text-xl text-[#F4B400] font-semibold">Think like a hacker. Learn like a pro.</p>
+                </div>
+            </div>
+
+            <!-- Content Container -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    
+                    <!-- Left: Over de wedstrijd -->
+                    <div class="lg:col-span-7 bg-white p-6 sm:p-8 rounded-xl border border-slate-200 shadow-sm space-y-6">
+                        <h2 class="text-2xl font-bold text-[#0B3D91] border-b border-slate-100 pb-3">Over de wedstrijd</h2>
+                        <p class="text-slate-700 leading-relaxed">
+                            De <strong>Kevin Mitnick Games</strong> is de jaarlijkse hackingcontest van Oost-Vlaanderen. Teams nemen het op tegen uitdagende opdrachten rond cybersecurity, netwerken, cryptografie en logica.
+                        </p>
+                        <div class="bg-slate-50 p-4 rounded-lg border-l-4 border-[#0B3D91] space-y-2">
+                            <div class="font-semibold text-slate-800 text-sm">Kerngebieden van de challenge:</div>
+                            <ul class="list-disc list-inside text-sm text-slate-600 space-y-1">
+                                <li>Ethical Hacking & Penetration Testing</li>
+                                <li>Netwerkbeveiliging & Pakketanalyse</li>
+                                <li>Cryptografie & Decodering</li>
+                                <li>Logisch en creatief probleemoplossend denken</li>
+                            </ul>
+                        </div>
+                        <div class="pt-2">
+                            <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80" alt="Cybersecurity lock concept" class="rounded-lg w-full h-56 object-cover shadow-inner">
+                        </div>
+                    </div>
+
+                    <!-- Right: Wall of Fame -->
+                    <div class="lg:col-span-5 bg-white p-6 sm:p-8 rounded-xl border border-slate-200 shadow-sm space-y-6">
+                        <div class="flex items-center space-x-3 text-[#0B3D91]">
+                            <i class="fa-solid fa-trophy text-2xl text-[#F4B400]"></i>
+                            <h2 class="text-2xl font-bold">Wall of Fame</h2>
+                        </div>
+                        <p class="text-sm text-slate-500">De eerbiedwaardige winnaars van onze school door de jaren heen:</p>
+
+                        <div class="space-y-4">
+                            <div class="flex items-center p-3.5 bg-slate-50 rounded-lg border border-slate-200 hover:border-amber-400 transition-colors">
+                                <span class="w-16 font-mono font-bold text-lg text-[#0B3D91]">2024</span>
+                                <div class="text-slate-800 font-medium text-sm">Devos Leon en Sarah Bonne</div>
+                            </div>
+                            <div class="flex items-center p-3.5 bg-slate-50 rounded-lg border border-slate-200 hover:border-amber-400 transition-colors">
+                                <span class="w-16 font-mono font-bold text-lg text-[#0B3D91]">2025</span>
+                                <div class="text-slate-800 font-medium text-sm">Alboort Lars</div>
+                            </div>
+                            <div class="flex items-center p-3.5 bg-amber-50 rounded-lg border border-amber-300">
+                                <span class="w-16 font-mono font-bold text-lg text-amber-700">2026</span>
+                                <div class="text-amber-900 font-semibold text-sm">Boone Vic</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= GITHUB VIEW ================= -->
+        <section id="view-github" class="view-section">
+            <!-- Hero Banner -->
+            <div class="relative bg-slate-900 text-white overflow-hidden py-16">
+                <img src="https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?auto=format&fit=crop&w=1600&q=80" alt="GitHub theme" class="absolute inset-0 w-full h-full object-cover opacity-20">
+                <div class="absolute inset-0 hero-overlay-github"></div>
+                
+                <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <a href="#home" onclick="navigateTo('home')" class="inline-flex items-center text-teal-300 hover:text-white text-sm font-medium mb-4 transition-colors">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Terug naar overzicht
+                    </a>
+                    <h1 class="text-3xl sm:text-5xl font-bold tracking-tight text-white mb-3">GitHub basisvaardigheden</h1>
+                    <p class="text-xl text-[#00A3A3] font-semibold">Code together. Build further.</p>
+                </div>
+            </div>
+
+            <!-- Content Container -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+                
+                <!-- Wat leer je? -->
+                <div class="bg-white p-6 sm:p-8 rounded-xl border border-slate-200 shadow-sm grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                    <div class="md:col-span-8 space-y-4">
+                        <h2 class="text-2xl font-bold text-[#0B3D91]">Wat leer je?</h2>
+                        <p class="text-slate-700 leading-relaxed">
+                            In 8 interactieve lessen ontdek je de meest waardevolle tool van developers: <strong>GitHub</strong>. Je leert samenwerken, versies beheren, pull requests gebruiken en professioneel werken aan projecten. Van clone tot pull request.
+                        </p>
+                    </div>
+                    <div class="md:col-span-4 flex justify-center">
+                        <div class="p-8 bg-slate-900 text-white rounded-2xl shadow-lg text-center w-full max-w-xs">
+                            <i class="fa-brands fa-github text-7xl text-white mb-2"></i>
+                            <div class="text-xs font-mono text-teal-400">Git & GitHub Workflow</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Onderwerpen Grid -->
+                <div class="space-y-6">
+                    <h2 class="text-2xl font-bold text-gray-900">Onderwerpen</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-start space-x-3">
+                            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-[#00A3A3] text-white flex items-center justify-center font-bold text-sm">1</span>
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-sm">Repositories en cloning</h3>
+                                <p class="text-xs text-slate-500 mt-1">Projecten ophalen en opzetten</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-start space-x-3">
+                            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-[#00A3A3] text-white flex items-center justify-center font-bold text-sm">2</span>
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-sm">Branches en merging</h3>
+                                <p class="text-xs text-slate-500 mt-1">Schoon gescheiden ontwikkelen</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-start space-x-3">
+                            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-[#00A3A3] text-white flex items-center justify-center font-bold text-sm">3</span>
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-sm">Pull requests en code review</h3>
+                                <p class="text-xs text-slate-500 mt-1">Kwaliteitscontrole & feedback</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-start space-x-3">
+                            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-[#00A3A3] text-white flex items-center justify-center font-bold text-sm">4</span>
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-sm">Issues en projectbeheer</h3>
+                                <p class="text-xs text-slate-500 mt-1">Taken en bugs opvolgen</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-start space-x-3">
+                            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-[#0B3D91] text-white flex items-center justify-center font-bold text-sm">5</span>
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-sm">.gitignore en best practices</h3>
+                                <p class="text-xs text-slate-500 mt-1">Geheimen en ballast uitsluiten</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-start space-x-3">
+                            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-[#0B3D91] text-white flex items-center justify-center font-bold text-sm">6</span>
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-sm">Samenwerken in teams</h3>
+                                <p class="text-xs text-slate-500 mt-1">Efficiënt workflows afstemmen</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-start space-x-3">
+                            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-[#0B3D91] text-white flex items-center justify-center font-bold text-sm">7</span>
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-sm">Conflicten oplossen</h3>
+                                <p class="text-xs text-slate-500 mt-1">Merge conflicts baas worden</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-start space-x-3">
+                            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-[#0B3D91] text-white flex items-center justify-center font-bold text-sm">8</span>
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-sm">GitHub in de echte wereld</h3>
+                                <p class="text-xs text-slate-500 mt-1">CI/CD & bedrijfspraktijken</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================= NOKIA VIEW ================= -->
+        <section id="view-nokia" class="view-section">
+            <!-- Hero Banner -->
+            <div class="relative bg-slate-900 text-white overflow-hidden py-16">
+                <img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=1600&q=80" alt="Nokia Telecom" class="absolute inset-0 w-full h-full object-cover opacity-30">
+                <div class="absolute inset-0 hero-overlay-nokia"></div>
+                
+                <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <a href="#home" onclick="navigateTo('home')" class="inline-flex items-center text-teal-300 hover:text-white text-sm font-medium mb-4 transition-colors">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Terug naar overzicht
+                    </a>
+                    <h1 class="text-3xl sm:text-5xl font-bold tracking-tight text-white mb-3">Nokia telecomthuisnetwerk</h1>
+                    <p class="text-xl text-[#F4B400] font-semibold">Van theorie naar de echte wereld.</p>
+                </div>
+            </div>
+
+            <!-- Content Container -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    
+                    <!-- Left: Over het bezoek -->
+                    <div class="lg:col-span-7 bg-white p-6 sm:p-8 rounded-xl border border-slate-200 shadow-sm space-y-6">
+                        <h2 class="text-2xl font-bold text-[#0B3D91] border-b border-slate-100 pb-3">Over het bezoek</h2>
+                        <p class="text-slate-700 leading-relaxed">
+                            We verdiepen ons in communicatienetwerken en krijgen een unieke blik achter de schermen bij <strong>Nokia in Antwerpen</strong>. Je ontdekt hoe netwerktechnologie in de praktijk werkt en welke carrièremogelijkheden er zijn.
+                        </p>
+                        <div class="pt-2">
+                            <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=80" alt="Telecom technology team" class="rounded-lg w-full h-60 object-cover shadow-inner">
+                        </div>
+                    </div>
+
+                    <!-- Right: Info cards -->
+                    <div class="lg:col-span-5 space-y-4">
+                        
+                        <!-- Locatie -->
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-start space-x-4">
+                            <div class="p-3 bg-blue-50 text-[#0B3D91] rounded-lg">
+                                <i class="fa-solid fa-location-dot text-2xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-gray-900">Locatie</h3>
+                                <p class="text-sm text-slate-600 mt-0.5">Nokia Antwerpen</p>
+                            </div>
+                        </div>
+
+                        <!-- Focus -->
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-start space-x-4">
+                            <div class="p-3 bg-teal-50 text-[#00A3A3] rounded-lg">
+                                <i class="fa-solid fa-[#5G] fa-bullseye text-2xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-gray-900">Focus</h3>
+                                <p class="text-sm text-slate-600 mt-0.5">Telecom, netwerken, 5G, innovatie</p>
+                            </div>
+                        </div>
+
+                        <!-- Praktisch -->
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-start space-x-4">
+                            <div class="p-3 bg-amber-50 text-amber-600 rounded-lg">
+                                <i class="fa-solid fa-[#info-circle] fa-circle-info text-2xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-gray-900">Praktisch</h3>
+                                <p class="text-sm text-slate-600 mt-0.5">Info volgt via de leerkracht.</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#0B3D91] text-white border-t border-blue-900/50 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+                <div>
+                    <div class="font-bold text-base">Sint-Franciscus Evergem</div>
+                    <div class="text-xs text-slate-300 mt-1">5 ICW – 2026-2027 | <span class="text-amber-300">Meer dan hardware alleen.</span></div>
+                </div>
+
+                <!-- Social Icons -->
+                <div class="flex items-center space-x-5 text-xl">
+                    <a href="https://github.com" target="_blank" rel="noopener noreferrer" title="GitHub" class="text-slate-300 hover:text-white transition-colors">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                    <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" title="YouTube" class="text-slate-300 hover:text-white transition-colors">
+                        <i class="fa-brands fa-youtube"></i>
+                    </a>
+                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="text-slate-300 hover:text-white transition-colors">
+                        <i class="fa-brands fa-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Search Modal -->
+    <div id="search-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-start justify-center pt-20 px-4">
+        <div class="bg-white w-full max-w-xl rounded-xl shadow-2xl overflow-hidden border border-slate-200">
+            <div class="p-4 border-b border-slate-200 flex items-center space-x-3">
+                <i class="fa-solid fa-magnifying-glass text-slate-400"></i>
+                <input type="text" id="search-input" onkeyup="handleSearch()" placeholder="Zoek onderwerpen (bijv. Mitnick, GitHub, Nokia, 5G)..." class="w-full focus:outline-none text-slate-800 placeholder-slate-400">
+                <button onclick="toggleSearchModal()" class="text-slate-400 hover:text-slate-600 text-sm font-semibold">Sluiten</button>
+            </div>
+            <div id="search-results" class="max-h-80 overflow-y-auto p-4 space-y-2 text-sm">
+                <div class="text-xs text-slate-400">Typ om te beginnen met zoeken...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Logic -->
+    <script>
+        // Data for site search
+        const searchDatabase = [
+            { title: "Kevin Mitnick Games", page: "mitnick", desc: "Hacking contest, cybersecurity challenges, Wall of Fame" },
+            { title: "Wall of Fame", page: "mitnick", desc: "Winnaars 2024, 2025, 2026 (Boone Vic, Devos Leon, Sarah Bonne, Alboort Lars)" },
+            { title: "GitHub basisvaardigheden", page: "github", desc: "Versiebeheer, Pull requests, Branches, Cloning, Repositories" },
+            { title: "GitHub Onderwerpen (8 lessen)", page: "github", desc: "Merge conflicten, .gitignore, issues, projectbeheer" },
+            { title: "Nokia telecomthuisnetwerk", page: "nokia", desc: "Bezoek Nokia Antwerpen, netwerktechnologie" },
+            { title: "Locatie & Praktisch Nokia", page: "nokia", desc: "Antwerpen, 5G, telecom, netwerken" }
+        ];
+
+        // Single Page Router
+        function navigateTo(viewId) {
+            // Hide all view sections
+            const views = document.querySelectorAll('.view-section');
+            views.forEach(view => view.classList.remove('active'));
+
+            // Show selected view
+            const targetView = document.getElementById('view-' + viewId);
+            if (targetView) {
+                targetView.classList.add('active');
+            }
+
+            // Update nav active link status
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => link.classList.remove('active'));
+
+            const activeNav = document.getElementById('nav-' + viewId);
+            if (activeNav) {
+                activeNav.classList.add('active');
+            }
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Update URL Hash without triggering reload
+            if (history.pushState) {
+                history.pushState(null, null, '#' + viewId);
+            } else {
+                location.hash = '#' + viewId;
+            }
+        }
+
+        // Scroll to Cards on Home View
+        function scrollToCards() {
+            const cardsSection = document.getElementById('cards-section');
+            if (cardsSection) {
+                cardsSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Toggle Mobile Menu
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuIcon = document.getElementById('menu-icon');
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.remove('hidden');
+                menuIcon.classList.remove('fa-bars');
+                menuIcon.classList.add('fa-xmark');
+            } else {
+                mobileMenu.classList.add('hidden');
+                menuIcon.classList.remove('fa-xmark');
+                menuIcon.classList.add('fa-bars');
+            }
+        }
+
+        // Search Modal functionality
+        function toggleSearchModal() {
+            const modal = document.getElementById('search-modal');
+            const input = document.getElementById('search-input');
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                input.focus();
+            } else {
+                modal.classList.add('hidden');
+                input.value = '';
+                document.getElementById('search-results').innerHTML = '<div class="text-xs text-slate-400">Typ om te beginnen met zoeken...</div>';
+            }
+        }
+
+        function handleSearch() {
+            const query = document.getElementById('search-input').value.toLowerCase().trim();
+            const resultsContainer = document.getElementById('search-results');
+
+            if (!query) {
+                resultsContainer.innerHTML = '<div class="text-xs text-slate-400">Typ om te beginnen met zoeken...</div>';
+                return;
+            }
+
+            const matches = searchDatabase.filter(item => 
+                item.title.toLowerCase().includes(query) || item.desc.toLowerCase().includes(query)
+            );
+
+            if (matches.length === 0) {
+                resultsContainer.innerHTML = '<div class="text-sm text-slate-500 py-2">Geen resultaten gevonden.</div>';
+                return;
+            }
+
+            resultsContainer.innerHTML = matches.map(item => `
+                <div onclick="navigateTo('${item.page}'); toggleSearchModal()" class="p-3 bg-slate-50 hover:bg-blue-50 rounded-lg cursor-pointer transition-colors border border-slate-100">
+                    <div class="font-bold text-[#0B3D91]">${item.title}</div>
+                    <div class="text-xs text-slate-600 mt-0.5">${item.desc}</div>
+                </div>
+            `).join('');
+        }
+
+        // Handle URL Hash routing on page load
+        window.addEventListener('load', () => {
+            const hash = window.location.hash.replace('#', '');
+            if (['home', 'mitnick', 'github', 'nokia'].includes(hash)) {
+                navigateTo(hash);
+            } else {
+                navigateTo('home');
+            }
+        });
+
+        // Handle Browser Back/Forward buttons
+        window.addEventListener('popstate', () => {
+            const hash = window.location.hash.replace('#', '');
+            if (['home', 'mitnick', 'github', 'nokia'].includes(hash)) {
+                navigateTo(hash);
+            } else {
+                navigateTo('home');
+            }
+        });
+    </script>
+</body>
+</html>
